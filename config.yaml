@@ -1,0 +1,5 @@
+k8slogs:
+  enablek8slog: true
+  archivelogtimer: "0 0 3 * * *"
+  logpath: /opt/logs
+  archivelogpath: /opt/archive
