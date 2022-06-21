@@ -12,7 +12,6 @@
 package archive_log
 
 import (
-	"io/fs"
 	"os"
 	"os/exec"
 	"strings"
@@ -55,9 +54,11 @@ func BackupK8sLogs(logsPath, archivePath string) {
 
 }
 
+// 开始备份文件
+
 func BackupFiles(src, dest, enddir string) {
 	if !PathExists(dest) {
-		err := os.Mkdir(dest, os.FileMode(fs.ModeDir))
+		err := os.Mkdir(dest, os.FileMode(os.ModeDir))
 		if err != nil {
 			global.Log.Info("目录创建失败")
 			global.Log.Error(err)
