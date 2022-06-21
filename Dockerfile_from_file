@@ -1,0 +1,11 @@
+# 运行镜像
+FROM harbor.devops.hpay/base/centos6:base
+COPY ./config.yaml /work/
+COPY ./k8s-node-manager /work/
+
+# 定义工作目录为work
+WORKDIR /work
+# 开放http 9999端口
+EXPOSE 9999
+# 启动http服务
+ENTRYPOINT ["./k8s-node-manager"]

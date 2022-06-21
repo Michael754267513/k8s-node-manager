@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: k8s-nond-manager
+    sunsystem: k8s-nond-manager
+    system: sys
+  name: k8s-nond-manager
+  namespace: system
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: k8s-nond-manager
+      sunsystem: k8s-nond-manager
+      system: sys
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: k8s-nond-manager
+        sunsystem: k8s-nond-manager
+        system: sys
+    spec:
+      containers:
+      - image: harbor.devops.hpay/controller/k8s-node-manager:v0.1
+        imagePullPolicy: Always
+        name: k8s-nond-manager
+        ports:
+        - containerPort: 9999
+          name: http
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/logs
+          name: hostpath
+        - mountPath: /opt/archive
+          name: backup-center-logs
+      dnsPolicy: ClusterFirst
+      serviceAccount: controller-sa
+      serviceAccountName: controller-sa
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /opt/logs
+          type: DirectoryOrCreate
+        name: hostpath
+      - name: backup-center-logs
+        persistentVolumeClaim:
+          claimName: backup-center-logs
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
