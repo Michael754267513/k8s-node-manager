@@ -22,9 +22,9 @@ k8s node 节点管理
 
 
 # 日志归档目录
-`
+```
       - name: backup-center-logs
         persistentVolumeClaim:
           claimName: backup-center-logs
 
-`
+```
